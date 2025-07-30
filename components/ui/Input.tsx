@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+// Note: This component is also accessible via lowercase import path due to case-insensitive file system
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
