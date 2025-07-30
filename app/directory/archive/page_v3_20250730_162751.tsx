@@ -1,12 +1,14 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
-import { MapPin, Phone, Globe, Star } from 'lucide-react'
+import { MapPin, Phone, Globe, Star, Clock } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/Button'
 import BusinessFilters from '@/components/BusinessFilters'
 import BusinessSearch from '@/components/BusinessSearch'
 import BusinessOwnerCta from '@/components/BusinessOwnerCta'
-import Image from 'next/image'
 
 interface BusinessWithDetails {
   id: string
@@ -166,11 +168,9 @@ async function BusinessList({ searchParams }: BusinessListProps) {
             <CardContent className="p-6">
               <div className="flex gap-4">
                 {primaryPhoto && (
-                  <Image
+                  <img
                     src={primaryPhoto.photo_url}
                     alt={business.business_name}
-                    width={96}
-                    height={96}
                     className="h-24 w-24 object-cover rounded-lg"
                   />
                 )}

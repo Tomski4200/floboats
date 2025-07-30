@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Save, Eye, Plus } from 'lucide-react'
+import { Calendar, MapPin, DollarSign, Users, Globe, Image, ArrowLeft, Save, Eye, Plus } from 'lucide-react'
 import { createBrowserClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useAuth } from '@/lib/auth-context'
@@ -38,10 +39,45 @@ interface EventVenue {
   zip_code: string
 }
 
-export default function CreateEventPage() {
+interface EventData {
+  id: string
+  title: string
+  short_description: string
+  long_description: string
+  category_id: string
+  organizer_business_id: string | null
+  event_start: string
+  event_end: string
+  all_day: boolean
+  location_name: string
+  location_address: string
+  location_city: string
+  location_state: string
+  location_zip: string
+  venue_id: string | null
+  virtual_meeting_url: string
+  cost: number
+  cost_description: string
+  max_attendees: number | null
+  registration_url: string
+  featured_image_url: string
+  event_visibility: string
+  status: string
+  approval_status: string
+  is_featured: boolean
+  author_id: string
+}
+
+export default function EditEventPage({ 
+  params 
+}: { 
+  params: Promise<{ id: string }> 
+}) {
   const { user } = useAuth()
   const router = useRouter()
+  const [eventId, setEventId] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const [loadingEvent, setLoadingEvent] = useState(true)
   const [categories, setCategories] = useState<EventCategory[]>([])
   const [userBusinesses, setUserBusinesses] = useState<Business[]>([])
   const [venues, setVenues] = useState<EventVenue[]>([])
@@ -84,13 +120,24 @@ export default function CreateEventPage() {
   })
   
   useEffect(() => {
+    async function resolveParams() {
+      const resolvedParams = await params
+      setEventId(resolvedParams.id)
+    }
+    resolveParams()
+  }, [params])
+  
+  useEffect(() => {
     if (!user) {
-      router.push('/auth/sign-in?redirect=/dashboard/events/new')
+      router.push('/auth/sign-in?redirect=/dashboard/events')
       return
     }
     
-    fetchInitialData()
-  }, [user])
+    if (eventId) {
+      fetchInitialData()
+      fetchEvent()
+    }
+  }, [user, eventId])
   
   async function fetchInitialData() {
     try {
@@ -105,15 +152,6 @@ export default function CreateEventPage() {
       
       setCategories(categoriesData || [])
       console.log('Categories fetched:', categoriesData?.length || 0)
-      
-      // Fetch user's businesses
-      // First, let's try to get all businesses to debug
-      const { data: allBusinesses, error: allBusinessesError } = await supabase
-        .from('businesses')
-        .select('*')
-        .limit(5)
-      
-      console.log('Sample businesses:', allBusinesses)
       
       // Fetch businesses through user_business_permissions table
       const { data: businessPermissions, error: permissionsError } = await supabase
@@ -154,6 +192,69 @@ export default function CreateEventPage() {
     }
   }
   
+  async function fetchEvent() {
+    try {
+      setLoadingEvent(true)
+      const supabase = createBrowserClient()
+      
+      const { data: event, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('id', eventId)
+        .single()
+      
+      if (error || !event) {
+        console.error('Error fetching event:', error)
+        router.push('/dashboard/events')
+        return
+      }
+      
+      // Check if user owns this event
+      if (event.author_id !== user?.id) {
+        router.push('/dashboard/events')
+        return
+      }
+      
+      // Parse dates
+      const startDate = new Date(event.event_start)
+      const endDate = new Date(event.event_end)
+      
+      // Set form data
+      setFormData({
+        title: event.title,
+        short_description: event.short_description,
+        long_description: event.long_description || '',
+        category_id: event.category_id,
+        organizer_business_id: event.organizer_business_id || 'none',
+        event_start_date: startDate.toISOString().split('T')[0],
+        event_start_time: event.all_day ? '' : startDate.toTimeString().slice(0, 5),
+        event_end_date: endDate.toISOString().split('T')[0],
+        event_end_time: event.all_day ? '' : endDate.toTimeString().slice(0, 5),
+        all_day: event.all_day,
+        location_name: event.location_name,
+        location_address: event.location_address || '',
+        location_city: event.location_city,
+        location_state: event.location_state,
+        location_zip: event.location_zip || '',
+        venue_id: event.venue_id || 'custom',
+        virtual_meeting_url: event.virtual_meeting_url || '',
+        cost: event.cost,
+        cost_description: event.cost_description || '',
+        max_attendees: event.max_attendees ? event.max_attendees.toString() : '',
+        registration_url: event.registration_url || '',
+        featured_image_url: event.featured_image_url || '',
+        event_visibility: event.event_visibility,
+        status: event.status,
+        is_featured: event.is_featured,
+      })
+    } catch (error) {
+      console.error('Error:', error)
+      router.push('/dashboard/events')
+    } finally {
+      setLoadingEvent(false)
+    }
+  }
+  
   async function handleSubmit(e: React.FormEvent, saveAsDraft = false) {
     e.preventDefault()
     
@@ -180,7 +281,6 @@ export default function CreateEventPage() {
         long_description: formData.long_description,
         category_id: formData.category_id,
         organizer_business_id: formData.organizer_business_id === 'none' ? null : formData.organizer_business_id || null,
-        author_id: user.id,
         event_start: eventStart,
         event_end: eventEnd,
         all_day: formData.all_day,
@@ -200,17 +300,19 @@ export default function CreateEventPage() {
         status: saveAsDraft ? 'draft' : 'published',
         approval_status: saveAsDraft ? 'pending' : 'pending',
         is_featured: formData.is_featured,
+        updated_at: new Date().toISOString(),
       }
       
       const { data, error } = await supabase
         .from('events')
-        .insert([eventData])
+        .update(eventData)
+        .eq('id', eventId)
         .select()
         .single()
       
       if (error) {
-        console.error('Error creating event:', error)
-        alert('Failed to create event. Please try again.')
+        console.error('Error updating event:', error)
+        alert('Failed to update event. Please try again.')
       } else {
         router.push('/dashboard/events')
       }
@@ -287,6 +389,61 @@ export default function CreateEventPage() {
     }
   }
   
+  if (loadingEvent) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header Skeleton */}
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between py-6">
+              <div className="flex items-center gap-4">
+                <Skeleton className="h-10 w-10 rounded" />
+                <div>
+                  <Skeleton className="h-8 w-48 mb-2" />
+                  <Skeleton className="h-4 w-64" />
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-10 w-32" />
+                <Skeleton className="h-10 w-32" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Content Skeleton */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <Card>
+                <CardHeader>
+                  <Skeleton className="h-6 w-40 mb-2" />
+                  <Skeleton className="h-4 w-60" />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-24 w-full" />
+                  <Skeleton className="h-32 w-full" />
+                </CardContent>
+              </Card>
+            </div>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <Skeleton className="h-6 w-40" />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -300,8 +457,8 @@ export default function CreateEventPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Create New Event</h1>
-                <p className="text-gray-600">Fill in the details to create your event</p>
+                <h1 className="text-2xl font-bold text-gray-900">Edit Event</h1>
+                <p className="text-gray-600">Update your event details</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -318,7 +475,7 @@ export default function CreateEventPage() {
                 disabled={loading}
               >
                 <Eye className="h-4 w-4 mr-2" />
-                Publish Event
+                Update & Publish
               </Button>
             </div>
           </div>

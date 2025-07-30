@@ -1,10 +1,11 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
-import { Calendar, MapPin, Users, DollarSign } from 'lucide-react'
+import { Calendar, MapPin, Clock, Users, DollarSign } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
+import { Button } from '@/components/ui/Button'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface EventListing {
   id: string
@@ -217,11 +218,9 @@ export default async function EventsPage() {
                 <Card className="hover:shadow-lg transition-shadow h-full">
                   {event.featured_image_url && (
                     <div className="h-48 overflow-hidden rounded-t-lg">
-                      <Image
+                      <img
                         src={event.featured_image_url}
                         alt={event.title}
-                        width={400}
-                        height={192}
                         className="w-full h-full object-cover"
                       />
                     </div>

@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { createBrowserClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/label'
 import ProtectedPage from '@/components/auth/ProtectedPage'
 import Link from 'next/link'
 
