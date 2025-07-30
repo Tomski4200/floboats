@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Calendar, Plus, Search, Edit, Trash2, Eye, MoreHorizontal, Heart, Users, MapPin } from 'lucide-react'
+import { Calendar, Plus, Search, Filter, Edit, Trash2, Eye, MoreHorizontal, Clock, CheckCircle, XCircle, Heart, Users } from 'lucide-react'
 import { createBrowserClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -18,8 +18,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAuth } from '@/lib/auth-context'
-import Image from 'next/image'
 
 interface EventListing {
   id: string
@@ -54,6 +54,7 @@ interface EventListing {
 
 function formatEventDate(start: string, end: string | null, allDay: boolean) {
   const startDate = new Date(start)
+  const endDate = end ? new Date(end) : null
   
   const dateOptions: Intl.DateTimeFormatOptions = { 
     month: 'short', 
@@ -80,9 +81,19 @@ export default function EventsDashboard() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
   const [activeTab, setActiveTab] = useState('upcoming')
   
-  const fetchEvents = useCallback(async () => {
+  useEffect(() => {
+    if (!user) {
+      router.push('/auth/sign-in?redirect=/dashboard/events')
+      return
+    }
+    
+    fetchEvents()
+  }, [user, activeTab])
+  
+  async function fetchEvents() {
     try {
       setLoading(true)
       const supabase = createBrowserClient()
@@ -154,16 +165,7 @@ export default function EventsDashboard() {
     } finally {
       setLoading(false)
     }
-  }, [user?.id, activeTab])
-  
-  useEffect(() => {
-    if (!user) {
-      router.push('/auth/sign-in?redirect=/dashboard/events')
-      return
-    }
-    
-    fetchEvents()
-  }, [user, fetchEvents, router])
+  }
   
   async function deleteEvent(id: string) {
     if (!confirm('Are you sure you want to delete this event?')) return
@@ -361,17 +363,17 @@ export default function EventsDashboard() {
             ) : (
               <div className="space-y-4">
                 {filteredEvents.map((event) => {
+                  const isUpcoming = new Date(event.event_start) > new Date()
+                  
                   return (
                     <Card key={event.id}>
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           {event.featured_image_url && (
                             <div className="hidden md:block">
-                              <Image
+                              <img
                                 src={event.featured_image_url}
                                 alt={event.title}
-                                width={128}
-                                height={96}
                                 className="w-32 h-24 object-cover rounded-lg"
                               />
                             </div>

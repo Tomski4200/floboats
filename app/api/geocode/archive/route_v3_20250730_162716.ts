@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     } else {
       return NextResponse.json({ error: 'Location not found' }, { status: 404 })
     }
-  } catch {
+  } catch (error) {
     return NextResponse.json({ error: 'Failed to geocode location' }, { status: 500 })
   }
 }
