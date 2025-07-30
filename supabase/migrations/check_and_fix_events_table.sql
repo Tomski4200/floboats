@@ -1,0 +1,322 @@
+-- Check existing events table structure and fix it
+
+-- First, let's see what columns exist in the events table
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_name = 'events' 
+ORDER BY ordinal_position;
+
+-- If category_id is missing, add it
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS category_id UUID REFERENCES event_categories(id);
+
+-- Add any other potentially missing columns
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS author_id UUID REFERENCES profiles(id) ON DELETE SET NULL;
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS organizer_business_id UUID REFERENCES businesses(id);
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS venue_id UUID REFERENCES event_venues(id);
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS event_visibility TEXT CHECK (event_visibility IN ('public', 'private')) DEFAULT 'public';
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS registration_url TEXT;
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS approval_status TEXT CHECK (approval_status IN ('pending', 'approved', 'rejected')) DEFAULT 'pending';
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS approval_notes TEXT;
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS organizer_verified BOOLEAN DEFAULT false;
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS view_count INTEGER DEFAULT 0;
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS click_count INTEGER DEFAULT 0;
+
+ALTER TABLE events 
+ADD COLUMN IF NOT EXISTS attendee_count INTEGER DEFAULT 0;
+
+-- Now try inserting the sample events again
+INSERT INTO events (
+  category_id,
+  title,
+  description,
+  short_description,
+  event_start,
+  event_end,
+  all_day,
+  location_name,
+  location_city,
+  location_state,
+  event_visibility,
+  max_attendees,
+  registration_required,
+  cost,
+  cost_description,
+  contact_email,
+  website_url,
+  featured_image_url,
+  tags,
+  status,
+  approval_status,
+  is_featured,
+  attendee_count
+) VALUES
+(
+  (SELECT id FROM event_categories WHERE name = 'Boat Shows'),
+  'Miami International Boat Show Summer Preview',
+  'Get an exclusive preview of the latest boats and marine technology before the main show season. Features over 200 exhibitors showcasing everything from center consoles to luxury yachts.',
+  'Preview the latest boats and marine tech with 200+ exhibitors',
+  '2025-07-03 10:00:00-04',
+  '2025-07-06 18:00:00-04',
+  false,
+  'Miami Beach Convention Center',
+  'Miami Beach',
+  'FL',
+  'public',
+  5000,
+  false,
+  25.00,
+  '$25 general admission, kids under 12 free',
+  'info@miamiboatshow.com',
+  'https://miamiboatshow.com',
+  'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=800',
+  ARRAY['boat-show', 'miami', 'yachts', 'new-boats'],
+  'published',
+  'approved',
+  true,
+  1247
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Fishing Tournaments'),
+  'Keys Slam Fishing Tournament',
+  'Three-day competitive fishing tournament targeting tarpon, bonefish, and permit. Captain''s meeting July 10th, fishing days July 11-13. Over $100,000 in prizes!',
+  'Prestigious Keys fishing tournament with $100k in prizes',
+  '2025-07-11 05:00:00-04',
+  '2025-07-13 20:00:00-04',
+  false,
+  'Hawks Cay Resort Marina',
+  'Duck Key',
+  'FL',
+  'public',
+  200,
+  true,
+  500.00,
+  '$500 per boat entry fee',
+  'register@keysslam.com',
+  'https://keysslam.com',
+  'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+  ARRAY['fishing', 'tournament', 'keys', 'tarpon', 'competitive'],
+  'published',
+  'approved',
+  false,
+  87
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Regattas & Races'),
+  'Tampa Bay Lightning Regatta',
+  'Annual summer sailing regatta featuring multiple classes including J/70, Melges 24, and PHRF. Racing in Tampa Bay with post-race parties at the yacht club.',
+  'Premier summer sailing regatta in Tampa Bay',
+  '2025-07-19 09:00:00-04',
+  '2025-07-20 17:00:00-04',
+  false,
+  'Davis Island Yacht Club',
+  'Tampa',
+  'FL',
+  'public',
+  150,
+  true,
+  175.00,
+  '$175 per boat, includes two dinner tickets',
+  'race@diyc.org',
+  'https://diyc.org/regatta',
+  'https://images.unsplash.com/photo-1569163139394-de4798d9c2c3?w=800',
+  ARRAY['sailing', 'regatta', 'racing', 'tampa-bay'],
+  'published',
+  'approved',
+  false,
+  62
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Marina Events'),
+  'Sunset Jazz & BBQ at the Marina',
+  'Enjoy live jazz music, BBQ, and beautiful sunset views at Bahia Mar. Family-friendly event with kids activities, food trucks, and local craft vendors.',
+  'Live jazz, BBQ, and sunset views at Bahia Mar',
+  '2025-07-12 17:00:00-04',
+  '2025-07-12 21:00:00-04',
+  false,
+  'Bahia Mar Yachting Center',
+  'Fort Lauderdale',
+  'FL',
+  'public',
+  500,
+  false,
+  0.00,
+  'Free admission, food and drinks available for purchase',
+  'events@bahiamar.com',
+  'https://bahiamar.com/events',
+  'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800',
+  ARRAY['music', 'family', 'marina', 'free'],
+  'published',
+  'approved',
+  false,
+  234
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Educational'),
+  'USCG Captain''s License Course',
+  'Intensive 5-day OUPV/Six-Pack captain''s license course. Covers navigation, safety, regulations, and seamanship. All materials included. Must pass exam on final day.',
+  '5-day USCG Captain''s License preparation course',
+  '2025-07-14 08:00:00-04',
+  '2025-07-18 17:00:00-04',
+  false,
+  'Maritime Professional Training',
+  'St. Petersburg',
+  'FL',
+  'public',
+  24,
+  true,
+  695.00,
+  '$695 includes all materials and exam fees',
+  'training@mptusa.com',
+  'https://mptusa.com',
+  'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=800',
+  ARRAY['education', 'captain-license', 'uscg', 'training'],
+  'published',
+  'approved',
+  false,
+  18
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Social & Meetups'),
+  'Full Moon Raft-Up Party',
+  'Join fellow boaters for a full moon raft-up in Biscayne Bay. Bring your boat, drinks, and good vibes. VHF Channel 68 for coordination. All boats welcome!',
+  'Monthly full moon raft-up party in Biscayne Bay',
+  '2025-07-13 18:00:00-04',
+  '2025-07-13 23:00:00-04',
+  false,
+  'Biscayne Bay - Nixon Sandbar',
+  'Key Biscayne',
+  'FL',
+  'public',
+  100,
+  false,
+  0.00,
+  'Free - BYOB',
+  'floridaboaters@gmail.com',
+  NULL,
+  'https://images.unsplash.com/photo-1522255272218-7ac5249be344?w=800',
+  ARRAY['social', 'raft-up', 'party', 'boating'],
+  'published',
+  'approved',
+  false,
+  43
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Demo Days'),
+  'Sea Ray Demo Days',
+  'Test drive the latest Sea Ray models including the new SLX series and Sundancer lineup. Factory representatives on-site. Register for your preferred time slot.',
+  'Test drive the latest Sea Ray models',
+  '2025-07-26 09:00:00-04',
+  '2025-07-27 17:00:00-04',
+  false,
+  'MarineMax Fort Lauderdale',
+  'Fort Lauderdale',
+  'FL',
+  'public',
+  200,
+  true,
+  0.00,
+  'Free - Registration required',
+  'demos@marinemax.com',
+  'https://marinemax.com/demo-days',
+  'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=800',
+  ARRAY['demo', 'sea-ray', 'test-drive', 'new-boats'],
+  'published',
+  'approved',
+  false,
+  156
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Fishing Tournaments'),
+  'Kids Fishing Clinic & Tournament',
+  'Free fishing clinic for kids ages 5-15. Learn basic fishing skills, marine conservation, and compete for prizes. Rods and bait provided. Parents welcome!',
+  'Free kids fishing clinic and friendly competition',
+  '2025-07-05 08:00:00-04',
+  '2025-07-05 12:00:00-04',
+  false,
+  'Key West Historic Seaport',
+  'Key West',
+  'FL',
+  'public',
+  100,
+  true,
+  0.00,
+  'Free event - donations accepted',
+  'kids@keywestfishing.org',
+  NULL,
+  'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=800',
+  ARRAY['kids', 'fishing', 'education', 'free', 'family'],
+  'published',
+  'approved',
+  false,
+  78
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Marina Events'),
+  'Independence Day Boat Parade & Fireworks',
+  'Annual 4th of July boat parade starting at 6 PM. Decorate your boat in patriotic themes and join the parade. Fireworks show at 9 PM visible from the water.',
+  'July 4th boat parade and fireworks spectacular',
+  '2025-07-04 18:00:00-04',
+  '2025-07-04 22:00:00-04',
+  false,
+  'Sarasota Bay',
+  'Sarasota',
+  'FL',
+  'public',
+  500,
+  true,
+  0.00,
+  'Free to participate or watch',
+  'parade@sarasotaboating.com',
+  NULL,
+  'https://images.unsplash.com/photo-1473186505569-9c61870c11f9?w=800',
+  ARRAY['july-4th', 'parade', 'fireworks', 'family', 'free'],
+  'published',
+  'approved',
+  true,
+  412
+),
+(
+  (SELECT id FROM event_categories WHERE name = 'Educational'),
+  'Women''s Intro to Boating Workshop',
+  'Hands-on workshop designed for women new to boating. Covers boat handling, docking, anchoring, safety, and basic maintenance. Small group instruction on actual boats.',
+  'Empowering women through hands-on boating education',
+  '2025-07-20 09:00:00-04',
+  '2025-07-20 16:00:00-04',
+  false,
+  'St. Petersburg Marina',
+  'St. Petersburg',
+  'FL',
+  'public',
+  20,
+  true,
+  125.00,
+  '$125 includes lunch and materials',
+  'women@boatingworkshops.com',
+  'https://womenboating.org',
+  'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=800',
+  ARRAY['women', 'education', 'beginner', 'workshop'],
+  'published',
+  'approved',
+  false,
+  15
+);
