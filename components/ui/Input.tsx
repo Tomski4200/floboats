@@ -1,2 +1,2 @@
-// This file is replaced by input.tsx (lowercase)
-// Keeping this to avoid breaking existing imports during transition
+// Re-export from the main input component to handle case sensitivity
+export * from './input-component'

@@ -1,2 +1,2 @@
-// This file is replaced by button.tsx (lowercase)
-// Keeping this to avoid breaking existing imports during transition
+// Re-export from the main button component to handle case sensitivity
+export * from './button-component'
