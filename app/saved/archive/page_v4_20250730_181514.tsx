@@ -141,7 +141,7 @@ export default function SavedBoatsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Saved Boats</h1>
-        <p className="mt-2 text-gray-600">Keep track of boats you&apos;re interested in</p>
+        <p className="mt-2 text-gray-600">Keep track of boats you're interested in</p>
       </div>
 
       {/* Filter Tabs */}
@@ -185,7 +185,7 @@ export default function SavedBoatsPage() {
           </svg>
           <h3 className="mt-2 text-sm font-medium text-gray-900">No saved boats</h3>
           <p className="mt-1 text-sm text-gray-500">
-            Start browsing and save boats you&apos;re interested in
+            Start browsing and save boats you're interested in
           </p>
           <Link
             href="/boats-for-sale"
@@ -208,7 +208,7 @@ export default function SavedBoatsPage() {
 
               const primaryPhoto = boat.boat_photos?.find(p => p.is_primary) || boat.boat_photos?.[0]
               const lengthDisplay = boat.length_inches 
-                ? `${Math.floor(boat.length_inches / 12)}&apos;${boat.length_inches % 12}&quot;`
+                ? `${Math.floor(boat.length_inches / 12)}'${boat.length_inches % 12}"`
                 : null
 
               return (

@@ -156,7 +156,7 @@ export default async function MyBoatsPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                         </svg>
                         {boat.length_inches ? 
-                          `${Math.floor(boat.length_inches / 12)}&apos;${boat.length_inches % 12}&quot;` : 
+                          `${Math.floor(boat.length_inches / 12)}'${boat.length_inches % 12}"` : 
                           `${boat.length_feet}ft`
                         }
                       </p>
@@ -181,7 +181,7 @@ export default async function MyBoatsPage() {
 
                   {/* Today's Stats */}
                   <div className="mt-3 pt-3 border-t border-gray-100">
-                    <p className="text-xs text-gray-600 font-medium mb-1">Today&apos;s Activity</p>
+                    <p className="text-xs text-gray-600 font-medium mb-1">Today's Activity</p>
                     <div className="flex items-center justify-between text-xs text-gray-500">
                       <span className="flex items-center">
                         <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

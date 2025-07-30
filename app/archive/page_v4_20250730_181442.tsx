@@ -4,49 +4,6 @@ import Image from 'next/image'
 import { formatLocation } from '@/lib/format-utils'
 import BusinessOwnerCta from '@/components/BusinessOwnerCta'
 
-interface BoatPhoto {
-  photo_url: string
-  is_primary: boolean
-}
-
-interface BoatProfile {
-  username: string
-  location: string
-}
-
-interface Boat {
-  id: string
-  title?: string
-  year?: number
-  make: string
-  model: string
-  length_inches?: number
-  length_feet?: number
-  location?: string
-  boat_photos?: BoatPhoto[]
-  profiles?: BoatProfile
-}
-
-interface BusinessCategory {
-  id: string
-  name: string
-  icon: string
-  color_hex: string
-}
-
-interface BusinessPhoto {
-  photo_url: string
-  photo_type: string
-}
-
-interface Business {
-  id: string
-  business_name: string
-  slug: string
-  categories: BusinessCategory[]
-  photos?: BusinessPhoto[]
-}
-
 export default async function HomePage() {
   const supabase = await createServerClient()
 
@@ -123,7 +80,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Florida&apos;s Premier Boat Marketplace
+              Florida's Premier Boat Marketplace
             </h1>
             <p className="text-xl mb-8 text-blue-100">
               Buy, sell, and connect with boat enthusiasts across the Sunshine State
@@ -204,10 +161,10 @@ export default async function HomePage() {
 
         {featuredBoats && featuredBoats.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {(featuredBoats as Boat[])?.map((boat) => {
-              const primaryPhoto = boat.boat_photos?.find((p) => p.is_primary) || boat.boat_photos?.[0]
+            {featuredBoats.map((boat: any) => {
+              const primaryPhoto = boat.boat_photos?.find((p: any) => p.is_primary) || boat.boat_photos?.[0]
               const lengthDisplay = boat.length_inches 
-                ? `${Math.floor(boat.length_inches / 12)}&apos;${boat.length_inches % 12}"`
+                ? `${Math.floor(boat.length_inches / 12)}'${boat.length_inches % 12}"`
                 : boat.length_feet ? `${boat.length_feet}ft` : null
 
               return (
@@ -329,8 +286,8 @@ export default async function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(businesses as Business[]).map((business) => {
-                const primaryPhoto = business.photos?.find((p) => p.photo_type === 'logo' || p.photo_type === 'exterior') || business.photos?.[0]
+              {businesses.map((business: any) => {
+                const primaryPhoto = business.photos?.find((p: any) => p.photo_type === 'logo' || p.photo_type === 'exterior') || business.photos?.[0]
                 
                 return (
                   <Link
@@ -378,7 +335,7 @@ export default async function HomePage() {
                       
                       {business.categories && business.categories.length > 0 && (
                         <p className="text-sm text-gray-600 mb-2">
-                          {business.categories.map((c) => c.name).join(', ')}
+                          {business.categories.map((c: any) => c.name).join(', ')}
                         </p>
                       )}
 

@@ -18,7 +18,7 @@ export default function Footer() {
               <span className="text-xl font-bold">FloBoats</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Florida&apos;s premier boat marketplace and community directory. 
+              Florida's premier boat marketplace and community directory. 
               Connecting boaters, marinas, and marine businesses across the Sunshine State.
             </p>
             <div className="flex space-x-4">
