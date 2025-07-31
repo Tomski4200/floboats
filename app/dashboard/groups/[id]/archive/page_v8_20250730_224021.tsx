@@ -3,8 +3,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import ProtectedPage from '@/components/auth/ProtectedPage';
 
-export default async function BusinessGroupPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function BusinessGroupPage({ params }: { params: { id: string } }) {
   const cookieStore = await cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -21,7 +20,7 @@ export default async function BusinessGroupPage({ params }: { params: Promise<{ 
   const { data: group, error } = await supabase
     .from('business_groups')
     .select('*')
-    .eq('id', id)
+    .eq('id', params.id)
     .single();
 
   if (error || !group) {
