@@ -12,7 +12,8 @@ interface Member {
   }[] | null;
 }
 
-export default async function GroupMembersPage({ params }: { params: { id: string } }) {
+export default async function GroupMembersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const cookieStore = await cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,7 +30,7 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
   const { data: group, error: groupError } = await supabase
     .from('business_groups')
     .select('name')
-    .eq('id', params.id)
+    .eq('id', id)
     .single();
 
   if (groupError || !group) {
@@ -39,7 +40,7 @@ export default async function GroupMembersPage({ params }: { params: { id: strin
   const { data: members, error: membersError } = await supabase
     .from('user_business_permissions')
     .select('user_id, role, profiles(username, avatar_url)')
-    .eq('group_id', params.id);
+    .eq('group_id', id);
 
   if (membersError) {
     console.error('Error fetching members:', membersError);

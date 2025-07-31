@@ -3,7 +3,7 @@ import { Calendar, MapPin, Users, DollarSign } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import Image from 'next/image'
 
 interface EventListing {

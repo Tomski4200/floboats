@@ -1,5 +1,5 @@
 #!/bin/bash
-# Pre-build script to create lowercase redirect files
+# Pre-build script to fix case-sensitive imports and other issues
 
 echo "Creating lowercase redirect files..."
 
