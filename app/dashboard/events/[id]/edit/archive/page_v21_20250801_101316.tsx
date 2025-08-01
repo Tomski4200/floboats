@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useAuth } from '@/lib/auth-context'
@@ -38,10 +39,45 @@ interface EventVenue {
   zip_code: string
 }
 
-export default function CreateEventPage() {
+interface EventData {
+  id: string
+  title: string
+  short_description: string
+  long_description: string
+  category_id: string
+  organizer_business_id: string | null
+  event_start: string
+  event_end: string
+  all_day: boolean
+  location_name: string
+  location_address: string
+  location_city: string
+  location_state: string
+  location_zip: string
+  venue_id: string | null
+  virtual_meeting_url: string
+  cost: number
+  cost_description: string
+  max_attendees: number | null
+  registration_url: string
+  featured_image_url: string
+  event_visibility: string
+  status: string
+  approval_status: string
+  is_featured: boolean
+  author_id: string
+}
+
+export default function EditEventPage({ 
+  params 
+}: { 
+  params: Promise<{ id: string }> 
+}) {
   const { user } = useAuth()
   const router = useRouter()
+  const [eventId, setEventId] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const [loadingEvent, setLoadingEvent] = useState(true)
   const [categories, setCategories] = useState<EventCategory[]>([])
   const [userBusinesses, setUserBusinesses] = useState<Business[]>([])
   const [venues, setVenues] = useState<EventVenue[]>([])
@@ -84,13 +120,24 @@ export default function CreateEventPage() {
   })
   
   useEffect(() => {
+    async function resolveParams() {
+      const resolvedParams = await params
+      setEventId(resolvedParams.id)
+    }
+    resolveParams()
+  }, [params])
+  
+  useEffect(() => {
     if (!user) {
-      router.push('/auth/sign-in?redirect=/dashboard/events/new')
+      router.push('/auth/sign-in?redirect=/dashboard/events')
       return
     }
     
-    fetchInitialData()
-  }, [user])
+    if (eventId) {
+      fetchInitialData()
+      fetchEvent()
+    }
+  }, [user, eventId])
   
   async function fetchInitialData() {
     try {
@@ -105,15 +152,6 @@ export default function CreateEventPage() {
       
       setCategories(categoriesData || [])
       console.log('Categories fetched:', categoriesData?.length || 0)
-      
-      // Fetch user's businesses
-      // First, let's try to get all businesses to debug
-      const { data: allBusinesses, error: allBusinessesError } = await supabase
-        .from('businesses')
-        .select('*')
-        .limit(5)
-      
-      console.log('Sample businesses:', allBusinesses)
       
       // Fetch businesses through user_business_permissions table
       const { data: businessPermissions, error: permissionsError } = await supabase
@@ -154,6 +192,69 @@ export default function CreateEventPage() {
     }
   }
   
+  async function fetchEvent() {
+    try {
+      setLoadingEvent(true)
+      const supabase = createBrowserClient()
+      
+      const { data: event, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('id', eventId)
+        .single()
+      
+      if (error || !event) {
+        console.error('Error fetching event:', error)
+        router.push('/dashboard/events')
+        return
+      }
+      
+      // Check if user owns this event
+      if (event.author_id !== user?.id) {
+        router.push('/dashboard/events')
+        return
+      }
+      
+      // Parse dates
+      const startDate = new Date(event.event_start)
+      const endDate = new Date(event.event_end)
+      
+      // Set form data
+      setFormData({
+        title: event.title,
+        short_description: event.short_description,
+        long_description: event.long_description || '',
+        category_id: event.category_id,
+        organizer_business_id: event.organizer_business_id || 'none',
+        event_start_date: startDate.toISOString().split('T')[0],
+        event_start_time: event.all_day ? '' : startDate.toTimeString().slice(0, 5),
+        event_end_date: endDate.toISOString().split('T')[0],
+        event_end_time: event.all_day ? '' : endDate.toTimeString().slice(0, 5),
+        all_day: event.all_day,
+        location_name: event.location_name,
+        location_address: event.location_address || '',
+        location_city: event.location_city,
+        location_state: event.location_state,
+        location_zip: event.location_zip || '',
+        venue_id: event.venue_id || 'custom',
+        virtual_meeting_url: event.virtual_meeting_url || '',
+        cost: event.cost,
+        cost_description: event.cost_description || '',
+        max_attendees: event.max_attendees ? event.max_attendees.toString() : '',
+        registration_url: event.registration_url || '',
+        featured_image_url: event.featured_image_url || '',
+        event_visibility: event.event_visibility,
+        status: event.status,
+        is_featured: event.is_featured,
+      })
+    } catch (error) {
+      console.error('Error:', error)
+      router.push('/dashboard/events')
+    } finally {
+      setLoadingEvent(false)
+    }
+  }
+  
   async function handleSubmit(e: React.FormEvent, saveAsDraft = false) {
     e.preventDefault()
     
@@ -180,7 +281,6 @@ export default function CreateEventPage() {
         long_description: formData.long_description,
         category_id: formData.category_id,
         organizer_business_id: formData.organizer_business_id === 'none' ? null : formData.organizer_business_id || null,
-        author_id: user.id,
         event_start: eventStart,
         event_end: eventEnd,
         all_day: formData.all_day,
@@ -200,17 +300,19 @@ export default function CreateEventPage() {
         status: saveAsDraft ? 'draft' : 'published',
         approval_status: saveAsDraft ? 'pending' : 'pending',
         is_featured: formData.is_featured,
+        updated_at: new Date().toISOString(),
       }
       
       const { data, error } = await supabase
         .from('events')
-        .insert([eventData])
+        .update(eventData)
+        .eq('id', eventId)
         .select()
         .single()
       
       if (error) {
-        console.error('Error creating event:', error)
-        alert('Failed to create event. Please try again.')
+        console.error('Error updating event:', error)
+        alert('Failed to update event. Please try again.')
       } else {
         router.push('/dashboard/events')
       }
@@ -287,6 +389,61 @@ export default function CreateEventPage() {
     }
   }
   
+  if (loadingEvent) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header Skeleton */}
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between py-6">
+              <div className="flex items-center gap-4">
+                <Skeleton className="h-10 w-10 rounded" />
+                <div>
+                  <Skeleton className="h-8 w-48 mb-2" />
+                  <Skeleton className="h-4 w-64" />
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-10 w-32" />
+                <Skeleton className="h-10 w-32" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Content Skeleton */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <Card>
+                <CardHeader>
+                  <Skeleton className="h-6 w-40 mb-2" />
+                  <Skeleton className="h-4 w-60" />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-24 w-full" />
+                  <Skeleton className="h-32 w-full" />
+                </CardContent>
+              </Card>
+            </div>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <Skeleton className="h-6 w-40" />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -300,14 +457,14 @@ export default function CreateEventPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Create New Event</h1>
-                <p className="text-gray-600">Fill in the details to create your event</p>
+                <h1 className="text-2xl font-bold text-gray-900">Edit Event</h1>
+                <p className="text-gray-600">Update your event details</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
-                onClick={(e) => handleSubmit(e, true)}
+                onClick={(e: React.MouseEvent) => handleSubmit(e as any, true)}
                 disabled={loading}
               >
                 <Save className="h-4 w-4 mr-2" />
@@ -318,7 +475,7 @@ export default function CreateEventPage() {
                 disabled={loading}
               >
                 <Eye className="h-4 w-4 mr-2" />
-                Publish Event
+                Update & Publish
               </Button>
             </div>
           </div>
@@ -344,7 +501,7 @@ export default function CreateEventPage() {
                   <Input
                     id="title"
                     value={formData.title}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, title: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Enter event title"
                     required
                   />
@@ -355,7 +512,7 @@ export default function CreateEventPage() {
                   <Textarea
                     id="short_description"
                     value={formData.short_description}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, short_description: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
                     placeholder="Brief description for event listings (max 200 characters)"
                     rows={3}
                     maxLength={200}
@@ -371,7 +528,7 @@ export default function CreateEventPage() {
                   <Textarea
                     id="long_description"
                     value={formData.long_description}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, long_description: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
                     placeholder="Detailed description of your event"
                     rows={8}
                   />
@@ -446,7 +603,7 @@ export default function CreateEventPage() {
                       id="start_date"
                       type="date"
                       value={formData.event_start_date}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, event_start_date: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, event_start_date: e.target.value })}
                       required
                     />
                   </div>
@@ -458,7 +615,7 @@ export default function CreateEventPage() {
                         id="start_time"
                         type="time"
                         value={formData.event_start_time}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, event_start_time: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, event_start_time: e.target.value })}
                         required={!formData.all_day}
                       />
                     </div>
@@ -472,7 +629,7 @@ export default function CreateEventPage() {
                       id="end_date"
                       type="date"
                       value={formData.event_end_date}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, event_end_date: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, event_end_date: e.target.value })}
                       min={formData.event_start_date}
                     />
                   </div>
@@ -484,7 +641,7 @@ export default function CreateEventPage() {
                         id="end_time"
                         type="time"
                         value={formData.event_end_time}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, event_end_time: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, event_end_time: e.target.value })}
                       />
                     </div>
                   )}
@@ -542,7 +699,7 @@ export default function CreateEventPage() {
                           <Input
                             id="venue-name"
                             value={newVenue.name}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVenue({ ...newVenue, name: e.target.value })}
+                            onChange={(e) => setNewVenue({ ...newVenue, name: e.target.value })}
                             placeholder="e.g., Miami Convention Center"
                           />
                         </div>
@@ -551,7 +708,7 @@ export default function CreateEventPage() {
                           <Input
                             id="venue-address"
                             value={newVenue.address}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVenue({ ...newVenue, address: e.target.value })}
+                            onChange={(e) => setNewVenue({ ...newVenue, address: e.target.value })}
                             placeholder="123 Main Street"
                           />
                         </div>
@@ -561,7 +718,7 @@ export default function CreateEventPage() {
                             <Input
                               id="venue-city"
                               value={newVenue.city}
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVenue({ ...newVenue, city: e.target.value })}
+                              onChange={(e) => setNewVenue({ ...newVenue, city: e.target.value })}
                               placeholder="Miami"
                             />
                           </div>
@@ -585,7 +742,7 @@ export default function CreateEventPage() {
                           <Input
                             id="venue-zip"
                             value={newVenue.zip_code}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVenue({ ...newVenue, zip_code: e.target.value })}
+                            onChange={(e) => setNewVenue({ ...newVenue, zip_code: e.target.value })}
                             placeholder="33139"
                           />
                         </div>
@@ -612,7 +769,7 @@ export default function CreateEventPage() {
                       <Input
                         id="location_name"
                         value={formData.location_name}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, location_name: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, location_name: e.target.value })}
                         placeholder="e.g., Miami Beach Convention Center"
                         required
                       />
@@ -623,7 +780,7 @@ export default function CreateEventPage() {
                       <Input
                         id="location_address"
                         value={formData.location_address}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, location_address: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, location_address: e.target.value })}
                         placeholder="123 Main Street"
                       />
                     </div>
@@ -634,7 +791,7 @@ export default function CreateEventPage() {
                         <Input
                           id="location_city"
                           value={formData.location_city}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, location_city: e.target.value })}
+                          onChange={(e) => setFormData({ ...formData, location_city: e.target.value })}
                           placeholder="Miami"
                           required
                         />
@@ -660,7 +817,7 @@ export default function CreateEventPage() {
                         <Input
                           id="location_zip"
                           value={formData.location_zip}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, location_zip: e.target.value })}
+                          onChange={(e) => setFormData({ ...formData, location_zip: e.target.value })}
                           placeholder="33139"
                         />
                       </div>
@@ -674,7 +831,7 @@ export default function CreateEventPage() {
                     id="virtual_url"
                     type="url"
                     value={formData.virtual_meeting_url}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, virtual_meeting_url: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, virtual_meeting_url: e.target.value })}
                     placeholder="https://zoom.us/j/123456789"
                   />
                   <p className="text-sm text-gray-500 mt-1">
@@ -701,7 +858,7 @@ export default function CreateEventPage() {
                     min="0"
                     step="0.01"
                     value={formData.cost}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, cost: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => setFormData({ ...formData, cost: parseFloat(e.target.value) || 0 })}
                   />
                 </div>
                 
@@ -710,7 +867,7 @@ export default function CreateEventPage() {
                   <Input
                     id="cost_description"
                     value={formData.cost_description}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, cost_description: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, cost_description: e.target.value })}
                     placeholder="e.g., $25 adults, $10 children"
                   />
                 </div>
@@ -722,7 +879,7 @@ export default function CreateEventPage() {
                     type="number"
                     min="1"
                     value={formData.max_attendees}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, max_attendees: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, max_attendees: e.target.value })}
                     placeholder="Leave blank for unlimited"
                   />
                 </div>
@@ -733,7 +890,7 @@ export default function CreateEventPage() {
                     id="registration_url"
                     type="url"
                     value={formData.registration_url}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, registration_url: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, registration_url: e.target.value })}
                     placeholder="https://eventbrite.com/..."
                   />
                 </div>
@@ -765,7 +922,7 @@ export default function CreateEventPage() {
                       id="featured_image_url"
                       type="url"
                       value={formData.featured_image_url}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, featured_image_url: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, featured_image_url: e.target.value })}
                       placeholder="https://example.com/image.jpg"
                     />
                     <p className="text-sm text-gray-500">
