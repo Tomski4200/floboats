@@ -140,7 +140,14 @@ export default function ThreadPage({
         notFound()
       }
       
-      setThread(threadData)
+      // Process thread to handle array responses from Supabase joins
+      const processedThread = {
+        ...threadData,
+        author: Array.isArray(threadData.author) ? threadData.author[0] : threadData.author,
+        category: Array.isArray(threadData.category) ? threadData.category[0] : threadData.category
+      }
+      
+      setThread(processedThread)
       
       // Increment view count
       await supabase.rpc('increment', {
@@ -167,7 +174,13 @@ export default function ThreadPage({
         .eq('is_hidden', false)
         .order('created_at', { ascending: true })
       
-      setReplies(repliesData || [])
+      // Process replies to handle array responses from Supabase joins
+      const processedReplies = (repliesData || []).map((reply: any) => ({
+        ...reply,
+        author: Array.isArray(reply.author) ? reply.author[0] : reply.author
+      }))
+      
+      setReplies(processedReplies)
     } catch (error) {
       console.error('Error loading thread:', error)
     } finally {

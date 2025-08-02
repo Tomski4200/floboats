@@ -157,7 +157,13 @@ export default function VenueDetailsPage({
         .order('event_start', { ascending: true })
       
       if (!upcomingError && upcomingData) {
-        setUpcomingEvents(upcomingData)
+        // Process events to handle array responses from Supabase joins
+        const processedUpcomingEvents = upcomingData.map((event: any) => ({
+          ...event,
+          category: Array.isArray(event.category) ? event.category[0] : event.category,
+          organizer: Array.isArray(event.organizer) ? event.organizer[0] : event.organizer
+        }))
+        setUpcomingEvents(processedUpcomingEvents)
       }
       
       // Past events
@@ -194,7 +200,13 @@ export default function VenueDetailsPage({
         .limit(50)
       
       if (!pastError && pastData) {
-        setPastEvents(pastData)
+        // Process events to handle array responses from Supabase joins
+        const processedPastEvents = pastData.map((event: any) => ({
+          ...event,
+          category: Array.isArray(event.category) ? event.category[0] : event.category,
+          organizer: Array.isArray(event.organizer) ? event.organizer[0] : event.organizer
+        }))
+        setPastEvents(processedPastEvents)
       }
       
       setLoading(false)

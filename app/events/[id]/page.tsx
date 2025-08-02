@@ -261,7 +261,21 @@ async function getEvent(idOrSlug: string) {
   
   console.log('Event found:', event.title)
   console.log('Event venue:', event.venue)
-  return event as EventDetails
+  
+  // Process event to handle array responses from Supabase joins
+  const processedEvent = {
+    ...event,
+    category: Array.isArray(event.category) ? event.category[0] : event.category,
+    organizer: Array.isArray(event.organizer) ? event.organizer[0] : event.organizer,
+    venue: Array.isArray(event.venue) ? event.venue[0] : event.venue,
+    photos: Array.isArray(event.photos) ? event.photos : (event.photos || []),
+    associated_businesses: event.associated_businesses?.map((assoc: any) => ({
+      ...assoc,
+      business: Array.isArray(assoc.business) ? assoc.business[0] : assoc.business
+    })) || []
+  }
+  
+  return processedEvent as EventDetails
 }
 
 export default function EventDetailsPage({ 

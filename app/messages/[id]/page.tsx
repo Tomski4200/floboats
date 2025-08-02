@@ -127,7 +127,14 @@ export default function ConversationPage({ params }: { params: Promise<{ id: str
         return
       }
 
-      setConversation(convData)
+      // Process conversation to handle array responses from Supabase joins
+      const processedConversation = {
+        ...convData,
+        buyer: Array.isArray(convData.buyer) ? convData.buyer[0] : convData.buyer,
+        seller: Array.isArray(convData.seller) ? convData.seller[0] : convData.seller
+      }
+      
+      setConversation(processedConversation)
 
       // Load messages
       const { data: messagesData, error: messagesError } = await supabase
@@ -146,10 +153,16 @@ export default function ConversationPage({ params }: { params: Promise<{ id: str
       if (messagesError) {
         console.error('Error loading messages:', messagesError)
       } else {
-        setMessages(messagesData || [])
+        // Process messages to handle array responses from Supabase joins
+        const processedMessages = (messagesData || []).map((message: any) => ({
+          ...message,
+          sender: Array.isArray(message.sender) ? message.sender[0] : message.sender
+        }))
+        
+        setMessages(processedMessages)
         
         // Mark messages as read
-        await markMessagesAsRead(messagesData || [], user.id)
+        await markMessagesAsRead(processedMessages, user.id)
       }
 
       // Subscribe to new messages
@@ -180,11 +193,17 @@ export default function ConversationPage({ params }: { params: Promise<{ id: str
                 .single()
 
               if (newMsg) {
-                setMessages(prev => [...prev, newMsg])
+                // Process message to handle array response from Supabase join
+                const processedNewMsg = {
+                  ...newMsg,
+                  sender: Array.isArray(newMsg.sender) ? newMsg.sender[0] : newMsg.sender
+                }
+                
+                setMessages(prev => [...prev, processedNewMsg])
                 
                 // Mark as read if from other user
-                if (newMsg.sender_id !== user.id) {
-                  await markMessagesAsRead([newMsg], user.id)
+                if (processedNewMsg.sender_id !== user.id) {
+                  await markMessagesAsRead([processedNewMsg], user.id)
                 }
               }
             }
