@@ -121,6 +121,12 @@ async function getEvents() {
     // Now fetch organizer details separately for events that have them
     const eventsWithOrganizers = await Promise.all(
       events.map(async (event) => {
+        // Handle category array response from Supabase
+        const processedEvent = {
+          ...event,
+          category: Array.isArray(event.category) ? event.category[0] : event.category
+        }
+        
         if (event.organizer_business_id) {
           const { data: organizer } = await supabase
             .from('businesses')
@@ -128,9 +134,9 @@ async function getEvents() {
             .eq('id', event.organizer_business_id)
             .single()
           
-          return { ...event, organizer }
+          return { ...processedEvent, organizer }
         }
-        return { ...event, organizer: null }
+        return { ...processedEvent, organizer: null }
       })
     )
     
