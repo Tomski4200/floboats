@@ -1,12 +1,14 @@
 import Link from 'next/link'
-import { MapPin, Phone, Globe, Star } from 'lucide-react'
+import { MapPin, Phone, Globe, Star, Clock } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 import BusinessFilters from '@/components/BusinessFilters'
 import BusinessSearch from '@/components/BusinessSearch'
 import BusinessOwnerCta from '@/components/BusinessOwnerCta'
 import Image from 'next/image'
+import { Suspense } from 'react'
 
 interface BusinessWithDetails {
   id: string
