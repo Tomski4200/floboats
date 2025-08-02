@@ -1,5 +1,0 @@
-{
-  "installCommand": "npm install",
-  "buildCommand": "bash vercel-build.sh",
-  "outputDirectory": ".next"
-}

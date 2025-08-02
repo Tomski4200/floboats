@@ -65,6 +65,11 @@ snyk.exe
 # Claude AI files
 .claude/
 
+# Archive files - ignore all archive folders at any level
+archive/
+**/archive/
+**/archive/**
+
 # Test files (optional - uncomment if you don't want to commit test files)
 # create-test-profile.js
 # test-connection.js
