@@ -115,20 +115,10 @@ export default async function LikedEventsPage() {
       console.error('Error fetching liked events:', likesError)
     } else {
       // Handle the case where event might be returned as an array
-      likedEvents = (likesData || []).map(like => {
-        const event = Array.isArray(like.event) ? like.event[0] : like.event
-        if (!event) return null
-        
-        return {
-          ...like,
-          event: {
-            ...event,
-            category: Array.isArray(event.category) ? event.category[0] : event.category,
-            venue: Array.isArray(event.venue) ? event.venue[0] : event.venue,
-            organizer: Array.isArray(event.organizer) ? event.organizer[0] : event.organizer
-          }
-        }
-      }).filter(Boolean) as LikedEvent[]
+      likedEvents = (likesData || []).map(like => ({
+        ...like,
+        event: Array.isArray(like.event) ? like.event[0] : like.event
+      })) as LikedEvent[]
     }
   } catch (error) {
     console.error('Liked events page error:', error)
