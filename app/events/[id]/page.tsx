@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-// import Image from 'next/image'
+import Image from 'next/image'
 import { Calendar, MapPin, Clock, Users, DollarSign, Share2, Heart, ChevronRight, Globe, Phone, Mail, ExternalLink, Shield } from 'lucide-react'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
