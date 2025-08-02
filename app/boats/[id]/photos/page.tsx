@@ -19,6 +19,7 @@ export default function BoatPhotosPage({ params }: { params: Promise<{ id: strin
     caption: string | null
     is_primary: boolean
     display_order: number
+    storage_path?: string
   }
 
   interface Boat {
@@ -277,7 +278,7 @@ export default function BoatPhotosPage({ params }: { params: Promise<{ id: strin
                     </button>
                   )}
                   <button
-                    onClick={() => handleDeletePhoto(photo.id, photo.storage_path)}
+                    onClick={() => handleDeletePhoto(photo.id, photo.storage_path || '')}
                     disabled={loading}
                     className="bg-red-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-red-600"
                   >
