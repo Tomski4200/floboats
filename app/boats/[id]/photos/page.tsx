@@ -85,7 +85,7 @@ export default function BoatPhotosPage({ params }: { params: Promise<{ id: strin
       }
 
       // Check if user owns this boat
-      if (boat.owner_id !== user.id) {
+      if (!boat || boat.owner_id !== user.id) {
         setError('You do not have permission to upload photos for this boat')
         return
       }
