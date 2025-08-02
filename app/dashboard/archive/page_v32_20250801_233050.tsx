@@ -8,24 +8,11 @@ import { Heart, Calendar, MapPin } from 'lucide-react'
 // TODO: Add favorite listings
 // TODO: Add profile completion prompts
 
-interface LikedEventItem {
-  event: {
-    id: string
-    slug: string
-    title: string
-    event_start: string
-    all_day: boolean
-    location_city: string
-    location_state: string
-    venue: { name: string } | null
-  } | null
-}
-
 export default async function DashboardPage() {
   let user = null
   let profile = null
   let likedEventsCount = 0
-  let upcomingLikedEvents: LikedEventItem[] = []
+  let upcomingLikedEvents = []
   
   try {
     const supabase = await createServerClient()
@@ -75,22 +62,9 @@ export default async function DashboardPage() {
       .order('created_at', { ascending: false })
     
     if (likedEvents) {
-      // Handle array returns from Supabase joins
-      const processedEvents = likedEvents.map(item => {
-        const event = Array.isArray(item.event) ? item.event[0] : item.event
-        if (!event) return null
-        
-        return {
-          event: {
-            ...event,
-            venue: Array.isArray(event.venue) ? event.venue[0] : event.venue
-          }
-        }
-      }).filter(Boolean) as LikedEventItem[]
-      
       // Filter for upcoming events and take the first 3
       const now = new Date().toISOString()
-      upcomingLikedEvents = processedEvents
+      upcomingLikedEvents = likedEvents
         .filter(item => item.event !== null && item.event.event_start >= now)
         .sort((a, b) => new Date(a.event.event_start).getTime() - new Date(b.event.event_start).getTime())
         .slice(0, 3)
