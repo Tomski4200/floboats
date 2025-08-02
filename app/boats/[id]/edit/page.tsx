@@ -44,11 +44,17 @@ export default function EditBoatPage({ params }: { params: Promise<{ id: string 
     boat_type: string
     engine_type?: string | null
     engine_hours?: number | null
+    engine_make?: string | null
+    engine_model?: string | null
+    fuel_type?: string | null
+    hull_material?: string | null
     condition: string
     location: string
     contact_email?: string | null
     contact_phone?: string | null
     features?: string | null
+    is_featured?: boolean
+    status?: string
   }
 
   const [formData, setFormData] = useState<BoatFormData | null>(null)
