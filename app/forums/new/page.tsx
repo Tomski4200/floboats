@@ -158,8 +158,11 @@ export default function NewThreadPage() {
         description: "Your thread has been posted successfully.",
       })
       
+      // Handle category array from Supabase join
+      const categorySlug = Array.isArray(thread.category) ? thread.category[0]?.slug : thread.category?.slug
+      
       // Redirect to the new thread
-      router.push(`/forums/${thread.category.slug}/${thread.slug}`)
+      router.push(`/forums/${categorySlug}/${thread.slug}`)
     } catch (error) {
       console.error('Error creating thread:', error)
       toast({
