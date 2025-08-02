@@ -92,7 +92,11 @@ export default async function DashboardPage() {
       const now = new Date().toISOString()
       upcomingLikedEvents = processedEvents
         .filter(item => item.event !== null && item.event.event_start >= now)
-        .sort((a, b) => new Date(a.event.event_start).getTime() - new Date(b.event.event_start).getTime())
+        .sort((a, b) => {
+          // TypeScript needs these assertions even though we filtered for non-null
+          if (!a.event || !b.event) return 0
+          return new Date(a.event.event_start).getTime() - new Date(b.event.event_start).getTime()
+        })
         .slice(0, 3)
     }
   } catch (error) {
