@@ -269,7 +269,7 @@ export default function NewThreadPage() {
                 <Input
                   id="title"
                   value={formData.title}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Enter a descriptive title for your thread"
                   maxLength={200}
                 />
@@ -300,7 +300,7 @@ export default function NewThreadPage() {
                   <Textarea
                     id="content"
                     value={formData.content}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                    onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                     placeholder="Write your thread content here..."
                     rows={8}
                     className="font-mono text-sm"

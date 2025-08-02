@@ -289,7 +289,7 @@ export default function SavedBoatsPage() {
                       <textarea
                         placeholder="Add notes..."
                         value={savedBoat.notes || ''}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        onChange={(e) => {
                           const newNotes = e.target.value
                           setSavedBoats(prev => 
                             prev.map(sb => 

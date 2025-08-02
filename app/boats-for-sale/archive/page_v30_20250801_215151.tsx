@@ -199,7 +199,7 @@ export default function SearchPage() {
                 <input
                   type="text"
                   value={searchTerm}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(e) => {
                     setSearchTerm(e.target.value)
                     setCurrentPage(1)
                   }}
@@ -215,7 +215,7 @@ export default function SearchPage() {
                 </label>
                 <select
                   value={selectedType}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  onChange={(e) => {
                     setSelectedType(e.target.value)
                     setCurrentPage(1)
                   }}
@@ -234,7 +234,7 @@ export default function SearchPage() {
                   Price Range
                 </label>
                 <select
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handlePriceRangeChange(priceRanges[parseInt(e.target.value)])}
+                  onChange={(e) => handlePriceRangeChange(priceRanges[parseInt(e.target.value)])}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 >
                   {priceRanges.map((range, idx) => (
@@ -249,7 +249,7 @@ export default function SearchPage() {
                   Length
                 </label>
                 <select
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleLengthRangeChange(lengthRanges[parseInt(e.target.value)])}
+                  onChange={(e) => handleLengthRangeChange(lengthRanges[parseInt(e.target.value)])}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 >
                   {lengthRanges.map((range, idx) => (
@@ -267,7 +267,7 @@ export default function SearchPage() {
                   <input
                     type="number"
                     value={yearMin}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e) => {
                       setYearMin(e.target.value)
                       setCurrentPage(1)
                     }}
@@ -279,7 +279,7 @@ export default function SearchPage() {
                   <input
                     type="number"
                     value={yearMax}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e) => {
                       setYearMax(e.target.value)
                       setCurrentPage(1)
                     }}
@@ -299,7 +299,7 @@ export default function SearchPage() {
                 <input
                   type="text"
                   value={location}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(e) => {
                     setLocation(e.target.value)
                     setCurrentPage(1)
                   }}
@@ -322,7 +322,7 @@ export default function SearchPage() {
                   <label className="text-sm text-gray-700">Sort by:</label>
                   <select
                     value={`${sortBy}-${sortOrder}`}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    onChange={(e) => {
                       const [field, order] = e.target.value.split('-')
                       setSortBy(field)
                       setSortOrder(order as 'asc' | 'desc')

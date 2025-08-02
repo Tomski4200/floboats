@@ -79,7 +79,7 @@ export default function NewBusinessGroupPage() {
             <Input
               id="name"
               value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
@@ -88,7 +88,7 @@ export default function NewBusinessGroupPage() {
             <Textarea
               id="description"
               value={description}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div>
@@ -97,7 +97,7 @@ export default function NewBusinessGroupPage() {
               id="websiteUrl"
               type="url"
               value={websiteUrl}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWebsiteUrl(e.target.value)}
+              onChange={(e) => setWebsiteUrl(e.target.value)}
             />
           </div>
           <div>
@@ -106,7 +106,7 @@ export default function NewBusinessGroupPage() {
               id="logoUrl"
               type="url"
               value={logoUrl}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogoUrl(e.target.value)}
+              onChange={(e) => setLogoUrl(e.target.value)}
             />
           </div>
           {error && <p className="text-red-500">{error}</p>}

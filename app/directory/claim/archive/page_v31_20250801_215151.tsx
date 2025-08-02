@@ -61,7 +61,7 @@ export default function ClaimBusinessPage() {
             type="text"
             placeholder="Enter business name or phone number"
             value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-1"
           />
           <Button type="submit" disabled={loading}>

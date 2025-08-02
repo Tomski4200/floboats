@@ -503,7 +503,7 @@ export default function ThreadPage({
                 <div className="space-y-4">
                   <Textarea
                     value={replyContent}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setReplyContent(e.target.value)}
+                    onChange={(e) => setReplyContent(e.target.value)}
                     placeholder="Write your reply..."
                     rows={4}
                   />

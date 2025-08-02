@@ -234,7 +234,7 @@ export default function SearchPage() {
                   Price Range
                 </label>
                 <select
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handlePriceRangeChange(priceRanges[parseInt(e.target.value)])}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePriceRangeChange(priceRanges[parseInt(e.target.value)])}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 >
                   {priceRanges.map((range, idx) => (
@@ -249,7 +249,7 @@ export default function SearchPage() {
                   Length
                 </label>
                 <select
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleLengthRangeChange(lengthRanges[parseInt(e.target.value)])}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleLengthRangeChange(lengthRanges[parseInt(e.target.value)])}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 >
                   {lengthRanges.map((range, idx) => (
@@ -322,7 +322,7 @@ export default function SearchPage() {
                   <label className="text-sm text-gray-700">Sort by:</label>
                   <select
                     value={`${sortBy}-${sortOrder}`}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const [field, order] = e.target.value.split('-')
                       setSortBy(field)
                       setSortOrder(order as 'asc' | 'desc')
