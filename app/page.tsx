@@ -46,6 +46,7 @@ interface Business {
   id: string
   business_name: string
   slug: string
+  is_premium?: boolean
   categories: BusinessCategory[]
   photos?: BusinessPhoto[]
 }

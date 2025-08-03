@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_4jJQAm7tD2RpnMyVYKr9gHNmiMuM",
-  "deployment_url": "floboats-mmcgp1ddv-tomski4200s-projects.vercel.app",
-  "created_at": 1754184041977,
-  "commit_sha": "c593535c502bee6f5d81fc6d5ed5e856f68f4616",
+  "deployment_id": "dpl_GHkk69zU1g8E5ciw7PCygNZKJYtG",
+  "deployment_url": "floboats-8p4h32yip-tomski4200s-projects.vercel.app",
+  "created_at": 1754184253145,
+  "commit_sha": "0be7eb663bba62625065aa171caa4f92e3876bb4",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/page.tsx:267:27\nType error: Property 'condition' does not exist on type 'Boat'."
+      "./app/page.tsx:360:33\nType error: Property 'is_premium' does not exist on type 'Business'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -15,9 +15,9 @@
   "fixes_needed": [
     {
       "file": "app/page.tsx",
-      "error": "./app/page.tsx:267:27\nType error: Property 'condition' does not exist on type 'Boat'.",
+      "error": "./app/page.tsx:360:33\nType error: Property 'is_premium' does not exist on type 'Business'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:21:44.552417"
+  "timestamp": "2025-08-02T21:25:16.451204"
 }
