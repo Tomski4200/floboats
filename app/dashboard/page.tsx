@@ -3,6 +3,8 @@ import { createServerClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Heart, Calendar, MapPin } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 // TODO: Add user boat listings
 // TODO: Add recent activity feed
 // TODO: Add favorite listings

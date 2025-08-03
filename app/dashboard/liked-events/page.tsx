@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
+export const dynamic = 'force-dynamic'
+
 interface LikedEvent {
   id: string
   created_at: string
