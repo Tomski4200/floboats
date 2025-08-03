@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_GHkk69zU1g8E5ciw7PCygNZKJYtG",
-  "deployment_url": "floboats-8p4h32yip-tomski4200s-projects.vercel.app",
-  "created_at": 1754184253145,
-  "commit_sha": "0be7eb663bba62625065aa171caa4f92e3876bb4",
+  "deployment_id": "dpl_9kx9G2McEyoez6bHXQ2EMAcRin9b",
+  "deployment_url": "floboats-nuvppvrck-tomski4200s-projects.vercel.app",
+  "created_at": 1754184342983,
+  "commit_sha": "6b259a9929cc7c57873f11fd38c79a7372d5350e",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/page.tsx:360:33\nType error: Property 'is_premium' does not exist on type 'Business'."
+      "./app/page.tsx:373:35\nType error: Property 'average_rating' does not exist on type 'Business'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -15,9 +15,9 @@
   "fixes_needed": [
     {
       "file": "app/page.tsx",
-      "error": "./app/page.tsx:360:33\nType error: Property 'is_premium' does not exist on type 'Business'.",
+      "error": "./app/page.tsx:373:35\nType error: Property 'average_rating' does not exist on type 'Business'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:25:16.451204"
+  "timestamp": "2025-08-02T21:26:45.369563"
 }
