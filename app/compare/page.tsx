@@ -36,7 +36,7 @@ interface Boat {
   }[]
 }
 
-export default function CompareBoatsPage() {
+function CompareBoatsContent() {
   const searchParams = useSearchParams()
   const supabase = createBrowserClient()
   const [boats, setBoats] = useState<Boat[]>([])
@@ -409,5 +409,13 @@ export default function CompareBoatsPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function CompareBoatsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CompareBoatsContent />
+    </Suspense>
   )
 }

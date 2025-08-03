@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import Image from 'next/image'
 
-export default function NewMessagePage() {
+function NewMessageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const boatId = searchParams.get('boat')
@@ -286,5 +286,13 @@ export default function NewMessagePage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function NewMessagePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NewMessageContent />
+    </Suspense>
   )
 }
