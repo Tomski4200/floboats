@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_H3KXdZgJ1G76FTsiJTcx6eA7J9XL",
-  "deployment_url": "floboats-1zxr78eu9-tomski4200s-projects.vercel.app",
-  "created_at": 1754184813603,
-  "commit_sha": "459fa4afe9ce3acffba683ab24b51124eacc3f66",
+  "deployment_id": "dpl_5uPAZwFWAQtz1d8hqRUgddVreFTF",
+  "deployment_url": "floboats-qgtlm3hh1-tomski4200s-projects.vercel.app",
+  "created_at": 1754184933674,
+  "commit_sha": "e3c74f465a0b3590d6f6103ac8f92f7c91b94068",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/profile/page.tsx:26:67\nType error: Expected 2 arguments, but got 3."
+      "./components/BusinessReviews.tsx:397:24\nType error: Cannot find name 'Badge'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -14,10 +14,10 @@
   },
   "fixes_needed": [
     {
-      "file": "app/profile/page.tsx",
-      "error": "./app/profile/page.tsx:26:67\nType error: Expected 2 arguments, but got 3.",
+      "file": "components/BusinessReviews.tsx",
+      "error": "./components/BusinessReviews.tsx:397:24\nType error: Cannot find name 'Badge'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:34:37.125728"
+  "timestamp": "2025-08-02T21:36:38.622304"
 }
