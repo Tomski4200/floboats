@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_9kx9G2McEyoez6bHXQ2EMAcRin9b",
-  "deployment_url": "floboats-nuvppvrck-tomski4200s-projects.vercel.app",
-  "created_at": 1754184342983,
-  "commit_sha": "6b259a9929cc7c57873f11fd38c79a7372d5350e",
+  "deployment_id": "dpl_25EDtG925vV5LW38zSioKtnbTk3d",
+  "deployment_url": "floboats-7z1d3y5on-tomski4200s-projects.vercel.app",
+  "created_at": 1754184435910,
+  "commit_sha": "b84abca1117e7276bca94834441b95b7768bc8a5",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/page.tsx:373:35\nType error: Property 'average_rating' does not exist on type 'Business'."
+      "./app/page.tsx:375:26\nType error: 'business.average_rating' is possibly 'undefined'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -15,9 +15,9 @@
   "fixes_needed": [
     {
       "file": "app/page.tsx",
-      "error": "./app/page.tsx:373:35\nType error: Property 'average_rating' does not exist on type 'Business'.",
+      "error": "./app/page.tsx:375:26\nType error: 'business.average_rating' is possibly 'undefined'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:26:45.369563"
+  "timestamp": "2025-08-02T21:28:19.091097"
 }
