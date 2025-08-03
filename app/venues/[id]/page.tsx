@@ -369,19 +369,18 @@ export default function VenueDetailsPage({
                     />
                   </div>
                   
-                  <Button variant="outline" className="w-full" asChild>
-                    <a 
-                      href={`https://maps.google.com/?q=${encodeURIComponent(
-                        `${venue.address} ${venue.city} ${venue.state} ${venue.zip_code}`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center"
-                    >
+                  <a 
+                    href={`https://maps.google.com/?q=${encodeURIComponent(
+                      `${venue.address} ${venue.city} ${venue.state} ${venue.zip_code}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="w-full">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Open in Google Maps
-                    </a>
-                  </Button>
+                    </Button>
+                  </a>
                 </div>
               </CardContent>
             </Card>
