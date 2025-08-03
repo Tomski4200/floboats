@@ -139,10 +139,10 @@ export default function NewThreadPage() {
         .select('id, slug, category:forum_categories!category_id(slug)')
         .single()
       
-      if (threadError) throw threadError
+      if (threadError || !thread) throw threadError || new Error('Failed to create thread')
       
       // Add tags if any selected
-      if (selectedTags.length > 0 && thread) {
+      if (selectedTags.length > 0) {
         const tagInserts = selectedTags.map(tagId => ({
           thread_id: thread.id,
           tag_id: tagId

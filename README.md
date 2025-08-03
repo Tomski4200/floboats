@@ -76,6 +76,27 @@ This project is configured to deploy automatically to Vercel when you push to Gi
    ```
    This script checks the latest Vercel deployment status. Default wait is 120 seconds.
 
+3. **Auto-Fix Deployment Errors**:
+   ```bash
+   python3 auto-fix-deployment.py deploy
+   ```
+   This will:
+   - Deploy your code
+   - Monitor the build
+   - Extract specific TypeScript errors if build fails
+   - Save errors to `deployment-errors.json` for fixing
+
+4. **Continuous Deploy & Fix** (Interactive):
+   ```bash
+   ./continuous-deploy-fix.sh
+   ```
+   This will:
+   - Deploy and monitor
+   - Show you errors to fix
+   - Wait for you to fix them
+   - Automatically commit and redeploy
+   - Repeat until successful (max 5 attempts)
+
 ### Important Notes
 
 - **Project Name**: Ensure deployments go to the "floboats" project
