@@ -514,7 +514,7 @@ END:VCALENDAR`
   }
   
   const isUpcoming = new Date(event.event_start) > new Date()
-  const isFull = event.max_attendees && event.attendee_count >= event.max_attendees
+  const isFull = !!(event.max_attendees && event.attendee_count >= event.max_attendees)
   
   return (
     <div className="min-h-screen bg-gray-50">
