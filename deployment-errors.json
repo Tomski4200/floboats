@@ -1,13 +1,23 @@
 {
-  "deployment_id": "dpl_ECktg9NSX9U76fh5esCgL4xGddiR",
-  "deployment_url": "floboats-8jt75t9o6-tomski4200s-projects.vercel.app",
-  "created_at": 1754183662667,
-  "commit_sha": "b4379e001c2114f062ee923b93fd5beb38029528",
+  "deployment_id": "dpl_2zPwGw65TY27k8cgjea5R3Znmtju",
+  "deployment_url": "floboats-ns4wqjp7f-tomski4200s-projects.vercel.app",
+  "created_at": 1754183826610,
+  "commit_sha": "2d6e630249d9ff4466ffb1bdbbbadc725ac71d2f",
   "errors": {
-    "failed_compile": false,
-    "type_errors": [],
-    "other_errors": []
+    "failed_compile": true,
+    "type_errors": [
+      "./app/page.tsx:235:27\nType error: Property 'price' does not exist on type 'Boat'."
+    ],
+    "other_errors": [
+      "Error: Command \"bash vercel-build.sh\" exited with 1"
+    ]
   },
-  "fixes_needed": [],
-  "timestamp": "2025-08-02T21:15:23.649252"
+  "fixes_needed": [
+    {
+      "file": "app/page.tsx",
+      "error": "./app/page.tsx:235:27\nType error: Property 'price' does not exist on type 'Boat'.",
+      "type": "typescript"
+    }
+  ],
+  "timestamp": "2025-08-02T21:18:10.656928"
 }

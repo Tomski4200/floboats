@@ -20,6 +20,7 @@ interface Boat {
   year?: number
   make: string
   model: string
+  price?: number
   length_inches?: number
   length_feet?: number
   location?: string
