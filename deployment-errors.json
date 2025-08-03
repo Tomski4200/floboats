@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_7bvdL8NrGYaeyGTxtAu1zJv9EzER",
-  "deployment_url": "floboats-m0brd4ylw-tomski4200s-projects.vercel.app",
-  "created_at": 1754184535999,
-  "commit_sha": "dffdb7b10f184d50b33f5d678c1948c5b27e2db3",
+  "deployment_id": "dpl_CQEGMADcxco1Kn655RWBhvAByyEr",
+  "deployment_url": "floboats-apscbx8k9-tomski4200s-projects.vercel.app",
+  "created_at": 1754184630886,
+  "commit_sha": "641a685a7d69389d1f2452b98e19f1e68c04f21b",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/page.tsx:392:35\nType error: Property 'short_description' does not exist on type 'Business'."
+      "./app/page.tsx:393:65\nType error: Property 'description' does not exist on type 'Business'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -15,9 +15,9 @@
   "fixes_needed": [
     {
       "file": "app/page.tsx",
-      "error": "./app/page.tsx:392:35\nType error: Property 'short_description' does not exist on type 'Business'.",
+      "error": "./app/page.tsx:393:65\nType error: Property 'description' does not exist on type 'Business'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:30:00.126330"
+  "timestamp": "2025-08-02T21:31:33.089717"
 }
