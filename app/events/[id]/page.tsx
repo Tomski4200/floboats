@@ -601,7 +601,7 @@ END:VCALENDAR`
                     <Button 
                       disabled={isFull}
                       onClick={handleAttend}
-                      variant={isAttending ? "secondary" : "default"}
+                      variant={isAttending ? "secondary" : "primary"}
                     >
                       {isFull ? 'Event Full' : isAttending ? 'Cancel Attendance' : 'Attend Event'}
                     </Button>

@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_B6CRLrkyPP7xFpFTkBTjtZ6jQaCV",
-  "deployment_url": "floboats-oe839aelv-tomski4200s-projects.vercel.app",
-  "created_at": 1754185375382,
-  "commit_sha": "b48309f423c1243a8e1953848620da761e277f7b",
+  "deployment_id": "dpl_4xjefkg8PK5HHbV1yc1b47Rw2zVG",
+  "deployment_url": "floboats-1oxowpot6-tomski4200s-projects.vercel.app",
+  "created_at": 1754185514739,
+  "commit_sha": "a61b23ace3cabd7508d2506489efb09702b87859",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/events/[id]/page.tsx:596:31\nType error: Type 'boolean | 0' is not assignable to type 'boolean | undefined'."
+      "./app/events/[id]/page.tsx:604:23\nType error: Type '\"default\" | \"secondary\"' is not assignable to type '\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | undefined'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -15,9 +15,9 @@
   "fixes_needed": [
     {
       "file": "app/events/[id]/page.tsx",
-      "error": "./app/events/[id]/page.tsx:596:31\nType error: Type 'boolean | 0' is not assignable to type 'boolean | undefined'.",
+      "error": "./app/events/[id]/page.tsx:604:23\nType error: Type '\"default\" | \"secondary\"' is not assignable to type '\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | undefined'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:43:59.944175"
+  "timestamp": "2025-08-02T21:46:19.723101"
 }
