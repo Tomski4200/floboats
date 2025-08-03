@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createBrowserClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import Image from 'next/image'
