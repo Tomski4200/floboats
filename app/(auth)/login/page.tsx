@@ -7,6 +7,7 @@ import { createBrowserClient } from '@/lib/supabase/client'
 import { ensureProfileClient } from '@/lib/profile-utils-client'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { getSiteURL } from '@/lib/utils/site-url'
 
 // TODO: Add form validation with Zod
 // TODO: Add remember me functionality
@@ -57,10 +58,11 @@ export default function LoginPage() {
     setError('')
 
     try {
+      const siteURL = getSiteURL()
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${siteURL}/auth/callback`,
         },
       })
 

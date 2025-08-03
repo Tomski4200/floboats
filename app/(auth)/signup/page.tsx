@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { getSiteURL } from '@/lib/utils/site-url'
 
 // TODO: Add form validation with Zod
 // TODO: Add email verification flow
@@ -108,10 +109,11 @@ export default function SignupPage() {
     setError('')
 
     try {
+      const siteURL = getSiteURL()
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${siteURL}/auth/callback`,
         },
       })
 

@@ -178,6 +178,7 @@ Required in .env.local:
 - NEXT_PUBLIC_SUPABASE_URL
 - NEXT_PUBLIC_SUPABASE_ANON_KEY
 - SUPABASE_SERVICE_ROLE_KEY (server-side only)
+- NEXT_PUBLIC_SITE_URL (optional - set to https://floboats.com in production)
 
 For deployment monitoring:
 - VERCEL_TOKEN
