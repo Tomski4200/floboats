@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft, MessageSquare, Eye } from 'lucide-react'
@@ -29,7 +29,7 @@ interface Tag {
   slug: string
 }
 
-export default function NewThreadPage() {
+function NewThreadContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user } = useAuth()
@@ -357,5 +357,13 @@ export default function NewThreadPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function NewThreadPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NewThreadContent />
+    </Suspense>
   )
 }
