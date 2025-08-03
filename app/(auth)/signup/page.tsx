@@ -155,74 +155,104 @@ export default function SignupPage() {
 
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="First Name"
-                name="firstName"
-                type="text"
-                required
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="John"
-                autoComplete="given-name"
-              />
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                  First Name
+                </label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  required
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder="John"
+                  autoComplete="given-name"
+                />
+              </div>
 
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Last Name
+                </label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  required
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder="Doe"
+                  autoComplete="family-name"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                Username
+              </label>
               <Input
-                label="Last Name"
-                name="lastName"
+                id="username"
+                name="username"
                 type="text"
                 required
-                value={formData.lastName}
+                value={formData.username}
                 onChange={handleChange}
-                placeholder="Doe"
-                autoComplete="family-name"
+                placeholder="captain_john"
+                autoComplete="username"
+              />
+              <p className="mt-1 text-sm text-gray-500">This will be your unique identifier on FloBoats</p>
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="john@example.com"
+                autoComplete="email"
               />
             </div>
 
-            <Input
-              label="Username"
-              name="username"
-              type="text"
-              required
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="captain_john"
-              helper="This will be your unique identifier on FloBoats"
-              autoComplete="username"
-            />
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="At least 6 characters"
+                autoComplete="new-password"
+              />
+              <p className="mt-1 text-sm text-gray-500">Must be at least 6 characters long</p>
+            </div>
 
-            <Input
-              label="Email address"
-              name="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="john@example.com"
-              autoComplete="email"
-            />
-
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="At least 6 characters"
-              helper="Must be at least 6 characters long"
-              autoComplete="new-password"
-            />
-
-            <Input
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              autoComplete="new-password"
-            />
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                Confirm Password
+              </label>
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                autoComplete="new-password"
+              />
+            </div>
           </div>
 
           <div className="flex items-center">
