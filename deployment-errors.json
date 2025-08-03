@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_5uPAZwFWAQtz1d8hqRUgddVreFTF",
-  "deployment_url": "floboats-qgtlm3hh1-tomski4200s-projects.vercel.app",
-  "created_at": 1754184933674,
-  "commit_sha": "e3c74f465a0b3590d6f6103ac8f92f7c91b94068",
+  "deployment_id": "dpl_A7TmeNdaLCzV6Hk1YEXpoR9Pw6rL",
+  "deployment_url": "floboats-mbcp70dee-tomski4200s-projects.vercel.app",
+  "created_at": 1754185039120,
+  "commit_sha": "52f71a576eef2e0ebbaac67fc433dde7f7e159e4",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./components/BusinessReviews.tsx:397:24\nType error: Cannot find name 'Badge'."
+      "./components/BusinessSearch.tsx:36:22\nType error: Parameter 'e' implicitly has an 'any' type."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -14,10 +14,10 @@
   },
   "fixes_needed": [
     {
-      "file": "components/BusinessReviews.tsx",
-      "error": "./components/BusinessReviews.tsx:397:24\nType error: Cannot find name 'Badge'.",
+      "file": "components/BusinessSearch.tsx",
+      "error": "./components/BusinessSearch.tsx:36:22\nType error: Parameter 'e' implicitly has an 'any' type.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:36:38.622304"
+  "timestamp": "2025-08-02T21:38:23.530152"
 }

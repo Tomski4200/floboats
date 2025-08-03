@@ -33,7 +33,7 @@ export default function BusinessSearch() {
           type="text"
           placeholder="Search businesses by name or description..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
           className="pl-10"
         />
       </div>
