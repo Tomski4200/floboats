@@ -1,15 +1,12 @@
 #!/bin/bash
-# Pre-build script to fix case-sensitive imports and other issues
+# Pre-build script for Vercel deployment
 
-echo "Creating lowercase redirect files..."
+echo "Starting Vercel build process..."
 
-# Create button.tsx
-echo "export { Button, type ButtonProps } from './Button'" > components/ui/button.tsx
-
-# Create input.tsx  
-echo "export { Input, type InputProps } from './Input'" > components/ui/input.tsx
-
-echo "Redirect files created successfully!"
+# Note: Case-sensitive import handling is done via existing redirect files:
+# - Button.tsx redirects to button-component.tsx
+# - Input.tsx redirects to input-component.tsx
+# These files are already committed to the repository
 
 # Run the actual build
 npm run build
