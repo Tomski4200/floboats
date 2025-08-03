@@ -137,7 +137,14 @@ export default function NewThreadPage() {
           author_id: user.id
         })
         .select('id, slug, category:forum_categories!category_id(slug)')
-        .single()
+        .single() as { 
+          data: { 
+            id: string; 
+            slug: string; 
+            category: { slug: string } | { slug: string }[] 
+          } | null;
+          error: any;
+        }
       
       if (threadError || !thread) throw threadError || new Error('Failed to create thread')
       
