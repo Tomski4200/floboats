@@ -583,7 +583,7 @@ END:VCALENDAR`
                 <Share2 className="h-4 w-4" />
               </Button>
               <Button 
-                variant={isLiked ? "default" : "outline"} 
+                variant={isLiked ? "primary" : "outline"} 
                 size="icon"
                 onClick={handleLike}
               >

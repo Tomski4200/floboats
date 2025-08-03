@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_44zicYYo2Jvw2PuANeUXtGkcsQfs",
-  "deployment_url": "floboats-48is33h9x-tomski4200s-projects.vercel.app",
-  "created_at": 1754185142322,
-  "commit_sha": "11d4cfc64656d3eaf1ffee1a8da75488cc4ff3aa",
+  "deployment_id": "dpl_61rGfknMA9W5hNy1Xkwy4bgL1N6F",
+  "deployment_url": "floboats-n01uyihto-tomski4200s-projects.vercel.app",
+  "created_at": 1754185270595,
+  "commit_sha": "34c7950c8fa672e27638a94bfd1a11eeaf066639",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./components/ui/Button.tsx:2:10\nType error: Circular definition of import alias 'Button'."
+      "./app/events/[id]/page.tsx:586:17\nType error: Type '\"default\" | \"outline\"' is not assignable to type '\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | undefined'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -14,10 +14,10 @@
   },
   "fixes_needed": [
     {
-      "file": "components/ui/Button.tsx",
-      "error": "./components/ui/Button.tsx:2:10\nType error: Circular definition of import alias 'Button'.",
+      "file": "app/events/[id]/page.tsx",
+      "error": "./app/events/[id]/page.tsx:586:17\nType error: Type '\"default\" | \"outline\"' is not assignable to type '\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | undefined'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:40:06.954006"
+  "timestamp": "2025-08-02T21:42:14.024650"
 }
