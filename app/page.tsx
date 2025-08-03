@@ -48,6 +48,8 @@ interface Business {
   slug: string
   description?: string
   short_description?: string
+  city?: string
+  state?: string
   is_premium?: boolean
   average_rating?: number
   review_count?: number

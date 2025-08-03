@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_CQEGMADcxco1Kn655RWBhvAByyEr",
-  "deployment_url": "floboats-apscbx8k9-tomski4200s-projects.vercel.app",
-  "created_at": 1754184630886,
-  "commit_sha": "641a685a7d69389d1f2452b98e19f1e68c04f21b",
+  "deployment_id": "dpl_GvAtKGUtME9FmEpzgs2yotE7jv8n",
+  "deployment_url": "floboats-p0n36r3uh-tomski4200s-projects.vercel.app",
+  "created_at": 1754184721312,
+  "commit_sha": "08d2cd6bdc856f0a30af4904055a587a40d35450",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/page.tsx:393:65\nType error: Property 'description' does not exist on type 'Business'."
+      "./app/page.tsx:402:35\nType error: Property 'city' does not exist on type 'Business'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -15,9 +15,9 @@
   "fixes_needed": [
     {
       "file": "app/page.tsx",
-      "error": "./app/page.tsx:393:65\nType error: Property 'description' does not exist on type 'Business'.",
+      "error": "./app/page.tsx:402:35\nType error: Property 'city' does not exist on type 'Business'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:31:33.089717"
+  "timestamp": "2025-08-02T21:33:03.939437"
 }
