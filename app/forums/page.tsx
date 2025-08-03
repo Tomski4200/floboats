@@ -81,7 +81,11 @@ export default async function ForumsPage() {
     .order('created_at', { ascending: false })
     .limit(5)
   
-  const recentThreads = recentThreadsData || []
+  // Process threads to handle array responses from Supabase joins
+  const recentThreads = (recentThreadsData || []).map((thread: any) => ({
+    ...thread,
+    category: Array.isArray(thread.category) ? thread.category[0] : thread.category
+  }))
   
   // Get top contributors (users with highest reputation from forum activity)
   const { data: topContributors } = await supabase

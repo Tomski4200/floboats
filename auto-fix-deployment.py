@@ -44,7 +44,7 @@ def get_latest_deployment():
 def get_build_logs(deployment_id):
     """Get build logs with errors"""
     headers = {'Authorization': f'Bearer {VERCEL_TOKEN}'}
-    url = f'https://api.vercel.com/v2/deployments/{deployment_id}/events?build=1&limit=200'
+    url = f'https://api.vercel.com/v2/deployments/{deployment_id}/events?build=1&limit=500'
     
     try:
         response = requests.get(url, headers=headers)
@@ -55,17 +55,27 @@ def get_build_logs(deployment_id):
         type_errors = []
         failed_compile = False
         
+        # Track context for errors
+        prev_text = ""
+        
         for log in logs:
             if isinstance(log, dict):
-                text = log.get('text', '')
+                payload = log.get('payload', {})
+                text = payload.get('text', '')
                 
                 # Look for TypeScript errors
                 if 'Type error:' in text:
-                    type_errors.append(text)
+                    # Add the previous line for context (usually has file:line info)
+                    if prev_text and ('.tsx:' in prev_text or '.ts:' in prev_text):
+                        type_errors.append(f"{prev_text}\n{text}")
+                    else:
+                        type_errors.append(text)
                 elif 'Failed to compile' in text:
                     failed_compile = True
                 elif any(keyword in text.lower() for keyword in ['error:', 'error building', 'build error']):
                     errors.append(text)
+                
+                prev_text = text
         
         return {
             'failed_compile': failed_compile,
