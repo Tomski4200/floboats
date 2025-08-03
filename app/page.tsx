@@ -22,6 +22,7 @@ interface Boat {
   model: string
   price?: number
   boat_type?: string
+  condition?: string
   length_inches?: number
   length_feet?: number
   location?: string
