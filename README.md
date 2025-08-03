@@ -43,10 +43,44 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Create a `.env.local` file in the root directory with the following variables:
 
 ```
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Vercel Configuration (for deployment monitoring)
+VERCEL_TOKEN=your_vercel_api_token
+VERCEL_PROJECT_ID=your_vercel_project_id
+VERCEL_PROJECT_NAME=floboats
 ```
+
+## Deployment
+
+This project is configured to deploy automatically to Vercel when you push to GitHub.
+
+### Deployment Scripts
+
+1. **Deploy and Check Build Status**:
+   ```bash
+   ./deploy-and-check.sh
+   ```
+   This script will:
+   - Check for uncommitted changes
+   - Push to GitHub (triggering Vercel deployment)
+   - Wait 120 seconds and check the build status
+   - Display build logs if the build fails
+
+2. **Check Build Status Only**:
+   ```bash
+   ./check-vercel-build.sh [wait_seconds]
+   ```
+   This script checks the latest Vercel deployment status. Default wait is 120 seconds.
+
+### Important Notes
+
+- **Project Name**: Ensure deployments go to the "floboats" project
+- **Project ID**: `prj_DU3SwuN5Jx3mTNy4TDCIZMAwakok`
+- The scripts will warn if deployment appears to be going to the wrong project
 
 ## Deployment
 
