@@ -23,7 +23,7 @@ export default async function ProfilePage() {
   }
 
   // Ensure profile exists
-  const profileStatus = await ensureProfile(user.id, user.email!, true)
+  const profileStatus = await ensureProfile(user.id, user.email!)
   
   if (profileStatus.error) {
     console.error('Error ensuring profile:', profileStatus.error)

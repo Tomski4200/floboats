@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_GvAtKGUtME9FmEpzgs2yotE7jv8n",
-  "deployment_url": "floboats-p0n36r3uh-tomski4200s-projects.vercel.app",
-  "created_at": 1754184721312,
-  "commit_sha": "08d2cd6bdc856f0a30af4904055a587a40d35450",
+  "deployment_id": "dpl_H3KXdZgJ1G76FTsiJTcx6eA7J9XL",
+  "deployment_url": "floboats-1zxr78eu9-tomski4200s-projects.vercel.app",
+  "created_at": 1754184813603,
+  "commit_sha": "459fa4afe9ce3acffba683ab24b51124eacc3f66",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/page.tsx:402:35\nType error: Property 'city' does not exist on type 'Business'."
+      "./app/profile/page.tsx:26:67\nType error: Expected 2 arguments, but got 3."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -14,10 +14,10 @@
   },
   "fixes_needed": [
     {
-      "file": "app/page.tsx",
-      "error": "./app/page.tsx:402:35\nType error: Property 'city' does not exist on type 'Business'.",
+      "file": "app/profile/page.tsx",
+      "error": "./app/profile/page.tsx:26:67\nType error: Expected 2 arguments, but got 3.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:33:03.939437"
+  "timestamp": "2025-08-02T21:34:37.125728"
 }
