@@ -245,19 +245,18 @@ export default function VenueDetailsPage({
               )}
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" asChild>
-                <a 
-                  href={`https://maps.google.com/?q=${encodeURIComponent(
-                    `${venue.address} ${venue.city} ${venue.state} ${venue.zip_code}`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center"
-                >
+              <a 
+                href={`https://maps.google.com/?q=${encodeURIComponent(
+                  `${venue.address} ${venue.city} ${venue.state} ${venue.zip_code}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline">
                   <MapPin className="h-4 w-4 mr-2" />
                   Get Directions
-                </a>
-              </Button>
+                </Button>
+              </a>
             </div>
           </div>
           

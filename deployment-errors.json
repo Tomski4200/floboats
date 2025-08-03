@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_4xjefkg8PK5HHbV1yc1b47Rw2zVG",
-  "deployment_url": "floboats-1oxowpot6-tomski4200s-projects.vercel.app",
-  "created_at": 1754185514739,
-  "commit_sha": "a61b23ace3cabd7508d2506489efb09702b87859",
+  "deployment_id": "dpl_4tWzCKQDHiiE8grVQwAYTXLo1A6T",
+  "deployment_url": "floboats-ea8pac8sh-tomski4200s-projects.vercel.app",
+  "created_at": 1754185610460,
+  "commit_sha": "b060e65516d2f00bf526de0d70ca92b39772d6d8",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./app/events/[id]/page.tsx:604:23\nType error: Type '\"default\" | \"secondary\"' is not assignable to type '\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | undefined'."
+      "./app/venues/[id]/page.tsx:248:41\nType error: Type '{ children: Element; variant: \"outline\"; asChild: true; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -14,10 +14,10 @@
   },
   "fixes_needed": [
     {
-      "file": "app/events/[id]/page.tsx",
-      "error": "./app/events/[id]/page.tsx:604:23\nType error: Type '\"default\" | \"secondary\"' is not assignable to type '\"primary\" | \"secondary\" | \"outline\" | \"ghost\" | undefined'.",
+      "file": "app/venues/[id]/page.tsx",
+      "error": "./app/venues/[id]/page.tsx:248:41\nType error: Type '{ children: Element; variant: \"outline\"; asChild: true; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:46:19.723101"
+  "timestamp": "2025-08-02T21:47:55.843332"
 }
