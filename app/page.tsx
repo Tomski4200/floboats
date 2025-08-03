@@ -46,6 +46,7 @@ interface Business {
   id: string
   business_name: string
   slug: string
+  short_description?: string
   is_premium?: boolean
   average_rating?: number
   review_count?: number
