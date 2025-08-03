@@ -1,12 +1,12 @@
 {
-  "deployment_id": "dpl_A7TmeNdaLCzV6Hk1YEXpoR9Pw6rL",
-  "deployment_url": "floboats-mbcp70dee-tomski4200s-projects.vercel.app",
-  "created_at": 1754185039120,
-  "commit_sha": "52f71a576eef2e0ebbaac67fc433dde7f7e159e4",
+  "deployment_id": "dpl_44zicYYo2Jvw2PuANeUXtGkcsQfs",
+  "deployment_url": "floboats-48is33h9x-tomski4200s-projects.vercel.app",
+  "created_at": 1754185142322,
+  "commit_sha": "11d4cfc64656d3eaf1ffee1a8da75488cc4ff3aa",
   "errors": {
     "failed_compile": true,
     "type_errors": [
-      "./components/BusinessSearch.tsx:36:22\nType error: Parameter 'e' implicitly has an 'any' type."
+      "./components/ui/Button.tsx:2:10\nType error: Circular definition of import alias 'Button'."
     ],
     "other_errors": [
       "Error: Command \"bash vercel-build.sh\" exited with 1"
@@ -14,10 +14,10 @@
   },
   "fixes_needed": [
     {
-      "file": "components/BusinessSearch.tsx",
-      "error": "./components/BusinessSearch.tsx:36:22\nType error: Parameter 'e' implicitly has an 'any' type.",
+      "file": "components/ui/Button.tsx",
+      "error": "./components/ui/Button.tsx:2:10\nType error: Circular definition of import alias 'Button'.",
       "type": "typescript"
     }
   ],
-  "timestamp": "2025-08-02T21:38:23.530152"
+  "timestamp": "2025-08-02T21:40:06.954006"
 }
