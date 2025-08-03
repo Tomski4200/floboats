@@ -103,6 +103,53 @@ This project is configured to deploy automatically to Vercel when you push to Gi
 - **Project ID**: `prj_DU3SwuN5Jx3mTNy4TDCIZMAwakok`
 - The scripts will warn if deployment appears to be going to the wrong project
 
+## Build Process
+
+The project uses a custom build script (`vercel-build.sh`) for Vercel deployments:
+
+1. The script runs automatically during Vercel builds
+2. It executes `npm run build` after initial setup
+3. Case-sensitive imports are handled via redirect files (e.g., Button.tsx → button-component.tsx)
+
+For local builds:
+```bash
+npm run build  # Standard Next.js build
+npm run type-check  # Check TypeScript types only
+```
+
+## Known Issues
+
+### Case-Sensitive Imports
+- Vercel runs on Linux (case-sensitive) while local dev may be case-insensitive
+- Solution: We use redirect files for components (Button.tsx exports from button-component.tsx)
+- Always import from capitalized paths: `@/components/ui/Button` not `@/components/ui/button`
+
+### Next.js 15 Requirements
+- Pages using `useSearchParams()` must wrap content in Suspense boundaries
+- Pages using `cookies()` need `export const dynamic = 'force-dynamic'`
+- See DEVELOPMENT.md for detailed patterns
+
+## Deployment Troubleshooting
+
+Common deployment errors and solutions:
+
+1. **"Circular definition of import alias"**
+   - Cause: Lowercase redirect files importing from themselves
+   - Solution: Fixed in vercel-build.sh - no longer creates problematic redirects
+
+2. **"Type 'destructive' is not assignable to type..."**
+   - Cause: Button component doesn't support all variants
+   - Solution: Use `variant="secondary"` with className for styling
+
+3. **"useSearchParams() should be wrapped in a suspense boundary"**
+   - Solution: Wrap component using useSearchParams in Suspense
+   - See DEVELOPMENT.md for the pattern
+
+4. **"Dynamic server usage: Route couldn't be rendered statically"**
+   - Solution: Add `export const dynamic = 'force-dynamic'` to the page
+
+For detailed deployment guidance, see DEPLOYMENT_GUIDE.md
+
 ## Deployment
 
 This project is optimized for deployment on [Vercel](https://vercel.com/).
@@ -111,7 +158,7 @@ This project is optimized for deployment on [Vercel](https://vercel.com/).
 
 ## Tech Stack
 
-- **Framework:** Next.js 14+
+- **Framework:** Next.js 15
 - **Database:** Supabase
 - **Styling:** Tailwind CSS
 - **TypeScript:** Full TypeScript support
@@ -129,6 +176,8 @@ This project is optimized for deployment on [Vercel](https://vercel.com/).
 ```
 
 ## Contributing
+
+Please read [DEVELOPMENT.md](DEVELOPMENT.md) for important patterns and requirements before contributing.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
